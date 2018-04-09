@@ -1,0 +1,14 @@
+body{
+    font-family: 'Montserrat', sans-serif;
+}
+
+header{
+    height: 10vh;
+}
+body{
+    background-color:#EAE3EA;
+}
+
+input[type=email] {
+    width: 436px;
+}

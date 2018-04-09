@@ -1,0 +1,43 @@
+body{
+    font-family: 'Montserrat', sans-serif;
+
+}
+
+header{
+    height : 100vh;
+    background: url("grey.jpg") fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.banner-center{
+    height: 100vh;
+    color: #96858F;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.banner-underline{
+    width: 300px;
+    border: 3px solid #c49b85;
+    margin: 0px auto 20px auto;
+}
+
+.banner-center a{
+    font-size: 30px;
+    width: 300px;
+    margin: 0px auto;
+    display: inline-block;
+    border: 3px solid #ac542c;
+    color:#ac542c;
+    text-decoration: none;
+    border-radius: 20px;
+}
+
+.banner-center a :hover,
+.banner a:focus{
+    color: #c49b85;
+    background-color: whitesmoke;
+}
