@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Examination Division - University of Moratuwa</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="mystyle.css">
+</head>
+
+<body>
+	<!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="#">Examination Division</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Services</a>
+            </li>
+			<li class="nav-item">
+              <a class="nav-link" href="#">Contact Us</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Log In</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+	
+	<br></br>
+	<div class="container">
+	
+		<h2> UNIVERSITY OF MORATUWA </h2>
+			<button type="button" class="btn btn-info" data-toggle="modal"
+			data-target="#studentModal">Student Login</button>
+
+			<!-- Student Modal -->
+			<div id="studentModal" class="modal fade" role="dialog">
+				<div class="modal-dialog modal-md">
+					<form class="modal-content action="/action_page.php">
+						<div class="imgcontainer">
+						<span onclick="document.getElementById('studentModal').style.display='none'" 
+						class="close" title="Close Modal">&times;</span>
+							<img src="student.jpg" class="rounded-circle" alt="student">
+						<div class="container">
+							<label for="email">Email address:</label>
+							<input type="email" class="form-control" id="email">
+						</div>
+						<div class="container">
+							<label for="pwd">Password:</label>
+							<input type="password" class="form-control" id="pwd">
+						</div>
+						<button type="submit" class="btn btn-block" style="background-color:#4CAF50">Login</button>
+						<div class="form-check">
+							<label class="form-check-label">
+								<input class="form-check-input" type="checkbox"> Remember me
+							</label>
+						</div>
+						<div class="container"">
+							<button type="button" onclick="document.getElementById('studentModal').style.display='none'" class="cancelbtn">Cancel</button>
+							<span class="psw">Forgot <a href="#">password?</a></span>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>

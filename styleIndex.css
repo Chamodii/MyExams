@@ -1,0 +1,43 @@
+
+
+body {
+  padding-top: 54px;
+}
+
+@media (min-width: 992px) {
+  body {
+    padding-top: 56px;
+  }
+}
+
+.business-header {
+  height: 50vh;
+  min-height: 300px;
+  background: url('https://ejhost.com/wp-content/uploads/2014/07/web-banner-1920-400-1024x213.jpg') center center no-repeat scroll;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  -o-background-size: cover;
+}
+
+.card {
+  height: 100%;
+}
+
+h1{
+	font-family:Tahoma;
+	font-size: 60px;
+	font-weight: bold;
+}
+#notices{
+	background-color: #B2BABB;
+	padding:10px;
+	color: #283747;
+}
+
+#quote{
+	font-family:Tahoma;
+	color: #212F3D;
+	font-weight: bold;
+	font-size: 25px;
+}
