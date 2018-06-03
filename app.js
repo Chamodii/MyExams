@@ -75,6 +75,37 @@ app.get('/logged',function (req,res) {
     res.render('userhome',{user:user});
 });
 
+app.get('/profile',function (req,res) {
+    var user = req.user;
+    res.render('profile',{user:user});
+});
+
+app.get('/calendar',function (req,res) {
+    var user = req.user;
+    res.render('calendar',{user:user});
+});
+
+app.get('/downloads',function (req,res) {
+    var user = req.user;
+    res.render('downloads',{user:user});
+});
+
+app.get('/repeat',function (req,res) {
+    res.render('repeat register')
+});
+
+app.get('/repeat/view',function (req,res) {
+    res.render('repeat view.ejs');
+});
+
+app.get('/repeat/register',function (req,res) {
+    res.render('exam register');
+});
+
+app.get('/reg',function (req,res) {
+    res.render('exam reg2');
+});
+
 // app.get('/login/:id/:password',function(req,res){
 //    var user = req.body.username;
 //    var password=req.body.password;

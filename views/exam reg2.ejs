@@ -8,8 +8,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-
-    <! bootstrap>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
     <! google fonts>
@@ -90,6 +88,19 @@
             margin:0px;
         }
 
+        div.data-list-input{
+            position: relative;
+            height: 20px;
+            display: inline-flex;
+            padding: 5px 0 5px 0;
+        }
+        select.data-list-input{
+            position: absolute;
+            top: 5px;
+            left: 0px;
+            height: 20px;
+        }
+
     </style>
 </head>
 
@@ -97,7 +108,7 @@
 <!-- Navigation -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
     <div class="container">
-        <a class="navbar-brand" href="/logged">Examination Division</a>
+        <a class="navbar-brand" href="#">Examination Division</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -128,10 +139,10 @@
         <div class="col-sm-3">
             <!--fixed side bar -->
             <div class="sidenav">
-                <img src="http://www.coursemaster.lk/wp-content/uploads/2014/08/484258_216944238425537_2046733636_n.jpg" alt="logo" style="width:150px;height:150px;">
+                <img src="http://www.coursemaster.lk/wp-content/uploads/2014/08/484258_216944238425537_2046733636_n.jpg" alt="logo" style="width:150px;height:150px;" >
                 <ul style="list-style-type:none">
                     <li><a href="#">My profile</a></li>
-                    <li><a href="/repeat/register">Online Registration & Exam Payment System</a></li>
+                    <li><a href="repeat/register">Online Registration & Exam Payment System</a></li>
                     <li><a href="#">Subject structure & fees</a></li>
                     <li><a href="/calendar">Exam calendar</a></li>
                     <li><a href="#">Apply for recorrection</a></li>
@@ -146,20 +157,54 @@
         </div>
 
         <div class="col-sm-6">
-            <h2 class="mt-4">Examination Division</h2>
-            <p>The Examinations Division has responsibility for making arrangements for the administration of all public examinations, which come under the purview of the Ministry of Education, and for providing other services related to examinations.</p>
-
+            <h2 class="mt-4">Online Examination Registration</h2>
+            <p> Enter your details.</p>
+            <div class="container" >
+                <label for="email" style="font-weight:bold;">Faculty: </label>
+                <div class="radio">
+                    <input type="radio" name="optradio"><label style="padding-left:5px;">Faculty of Engineering</label>
+                </div>
+                <div class="radio">
+                    <input type="radio" name="optradio"><label style="padding-left:5px;">Faculty of Information Technology</label>
+                </div>
+                <div class="radio disabled">
+                    <input type="radio" name="optradio"><label style="padding-left:5px;">Faculty of Architecture</label>
+                </div>
+                <br></br>
+                <label style="font-weight:bold;">Department:</label>
+                <div class="data-list-input" style="width:300px;">
+                    <select class="data-list-input" style="width:300px;">
+                        <option value="Computer Science & Engineering">Computer Science & Engineering</option>
+                        <option value="Electronic & Telecommunication Engineering">Electronic & Telecommunication Engineering</option>
+                        <option value="Electrical Engineering">Electrical Engineering</option>
+                        <option value="Civil Engineering">Civil Engineering</option>
+                        <option value="Chemical & Process Engineering">Chemical & Process Engineering</option>
+                        <option value="Material Engineering">Material Engineering</option>
+                    </select>
+                </div>
+                <br></br>
+                <label style="font-weight:bold;">Semester: </label>
+                <div class="data-list-input" style="width:190px;">
+                    <select class="data-list-input" style="width:190px;">
+                        <option value="">&lt;Semester 1&gt;</option>
+                        <option value="sem2">Semester 2</option>
+                        <option value="sem3">Semester 3</option>
+                    </select>
+                </div>
+            </div>
+            <br></br>
+            <a class="btn btn-primary btn-lg" href="#"> Submit </a>
         </div>
 
         <div class="col-sm-3 sidebar content-box" style="background-color:#eee;">
             <ul class="nav">
                 <li>
-                    <h5 class="mt-3" id="upcoming_events">Upcoming Events<span onclick="document.getElementById('notice_bar1').style.display='none'" class="close" data-dismiss="alert" position="left">&times;</button></h5>
+                    <h5 class="mt-3" id="upcoming_events">Upcoming Events<span onclick="document.getElementById('notice_bar1').style.display='none'" class="close" data-dismiss="alert" position="left">&times;</span></h5>
                     <p id="para">The Examinations Division has responsibility for making arrangements for the administration of all public examination</p>
                 </li>
                 <li>
                     <hr></hr>
-                    <h5 class="mt-3" id="notices">Notices<span onclick="document.getElementById('notice_bar1').style.display='none'" class="close" data-dismiss="alert" position="left">&times;</button></h5>
+                    <h5 class="mt-3" id="notices">Notices<span onclick="document.getElementById('notice_bar1').style.display='none'" class="close" data-dismiss="alert" position="left">&times;</span></h5>
                     <p id="para">The Examinations Division has responsibility for making arrangements for the administration of all public examination  </p>
                 </li>
                 <li>
@@ -183,4 +228,3 @@
     <!-- /.container -->
 </footer>
 </body>
-</html>

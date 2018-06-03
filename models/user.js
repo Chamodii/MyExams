@@ -3,13 +3,22 @@ var mongoose = require("mongoose");
 
 var UserSchema = new mongoose.Schema({
     password : String,
-    firstName:String,
-    lastName:String,
+    name : {first : String, last : String},
     username:String,
-    dept:String,
     email:String,
-    role: String,
-    modules : [{type:mongoose.Schema.Types.ObjectId, ref:'Module'}]
+    roles : {
+        student : {type : mongoose.Schema.Types.ObjectId, ref : 'Student'},
+        admin : {type : mongoose.Schema.Types.ObjectId, ref : 'Admin'},
+        lecturer : {type : mongoose.Schema.Types.ObjectId, ref : 'Lecturer'}
+    }
+});
+//plugin the sub modules to the parent one
+
+//StudentSchema
+
+var StudentSchema = new mongoose.Schema({
+   department : String,
+
 });
 
 UserSchema.plugin(passportLocalMongoose);
