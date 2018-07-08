@@ -63,6 +63,13 @@
         </div>
         <div class="col-lg-6">
             <form action="/create" method="post">
+                <div class="form-group alert">
+                    <strong>
+                        <%if(message){%>
+                        <p class="text-danger"><%=message%></p>
+                        <%}%>
+                    </strong>
+                </div>
 
                 <div  class="form-group">
                     <input type="text" name="firstName" placeholder="First Name">

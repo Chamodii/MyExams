@@ -1,0 +1,45 @@
+<%include partials/headerAdmin.ejs%>
+
+<div class="col-sm-6">
+    <div class="table">
+        <table class="masterlist">
+            <tr>
+                <th>Full Name</th>
+                <th>ID</th>
+                <th>NIC</th>
+                <th>Faculty</th>
+                <th>Department</th>
+
+            </tr>
+
+
+            <% users.forEach(function(user){ %>
+            <tr>
+                <th><%= user.firstName %> <%= user.lastName%></th>
+                <th><%= user.username %></th>
+                <th><%= user.NIC %></th>
+                <th><%= user.faculty %></th>
+                <th><%= user.department %></th>
+                <th><a href="/editLecturer/<%=user._id%>" role="button" class="btn btn-primary">Edit</a></th>
+                <th>
+                    <form action="/deleteLecturer/<%=user._id%>" method="post">
+                        <button class="btn btn-danger">Delete</button>
+                    </form></th>
+
+
+            </tr>
+            <% });%>
+
+
+
+
+        </table>
+    </div>
+
+</div>
+
+
+
+</div>
+</div>
+<%include partials/footer.ejs%>
