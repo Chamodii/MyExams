@@ -49,7 +49,7 @@ app.get('/login',function (req,res) {
 });
 
 app.post('/create',function(req,res){
-    var newUser = new User({firstName: req.body.firstName,lastName:req.body.lastName,dept:req.body.dept,username:req.body.username,email:req.body.email});
+    var newUser = new User({firstName: req.body.firstName,lastName:req.body.lastName,username:req.body.username,email:req.body.email});
     if(req.body.role==="admin123"){
         newUser.role="Admin";
         User.register(newUser, req.body.password, function(err,user){
@@ -127,7 +127,35 @@ app.get('/repeat/view',function (req,res) {
 // });
 
 app.get('/reg',function (req,res) {
-    res.render('exam reg2');
+    if(req.user!=null && req.user.role==='Student'){
+        res.render('exam register',{user:req.user});
+    }
+    else{
+        res.redirect('/');
+    }
+});
+
+app.post('/reg/:id',function (req,res) {
+   User.findOne({_id:req.params.id},function (err,user) {
+       if(err){
+           console.log(err);
+       }
+       else{
+           Module.find({department: user.department,semester:req.body.semester},function (err,modules) {
+               res.render('exam reg2',{modules:modules});
+           })
+       }
+   })
+});
+
+app.post('/registerExams/:id',function (req,res) {
+    User.update({_id:req.params.id},{modules:req.body.module},function(err,user) {
+        if(err){
+            console.log(err);
+        }else{
+            res.redirect('/logged');
+        }
+    });
 });
 
 app.get('/registerStudent',function (req,res) {
@@ -208,7 +236,7 @@ app.get('/editStudent/:id',function (req,res) {
 });
 
 app.post('/editStudent/:id',function (req,res){
-    var data={firstName:req.body.firstName,lastName:req.body.lastName,username:req.body.username,DOB:req.body.DOB,batch:req.body.batch,role:"Student",faculty:req.body.faculty,NIC:req.body.NIC,degree:req.body.degree};
+    var data={firstName:req.body.firstName,lastName:req.body.lastName,username:req.body.username,DOB:req.body.DOB,batch:req.body.batch,role:"Student",faculty:req.body.faculty,NIC:req.body.NIC,degree:req.body.degree,department:req.body.department};
    User.remove({_id:req.params.id},function (err,user) {
        if(err){console.log(err)}
        else{
@@ -240,24 +268,7 @@ app.post('/deleteStudent/:id',function (req,res) {
 });
 
 
-app.put('editProfile/:id',function (req,res) {
-    User.findOne({_id:req.params.id},function (err,user) {
-        if(err){
-            console.log(err);
-        }else{
-            user.firstName=req.body.firstName;
-            user.lastName=req.body.lastName;
-            user.NIC=req.body.NIC;
-            user.email=req.body.email;
-            user.save(function (err,user) {
-                if(err){console.log(err);}
-                else{
-                    res.redirect('/logged');
-                }
-            })
-        }
-    })
-});
+
 
 app.get('/viewModules/:department',function (req,res) {
    var dep=req.params.department;
@@ -355,6 +366,15 @@ app.post('/deleteLecturer/:id',function (req,res) {
     });
 });
 
+app.post('/editProfile/:id',function (req,res) {
+    User.update({_id:req.params.id},{email:req.body.email},function(err,user) {
+        if(err){
+            console.log(err);
+        }else{
+            res.redirect('/logged');
+        }
+    });
+});
 
 
 app.listen(3000);

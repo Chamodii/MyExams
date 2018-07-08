@@ -1,154 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <title>Examination Division - University of Moratuwa</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-
-    <! google fonts>
-    <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
-
-    <! font-awesome>
-    <link
-            href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css"
-            rel="stylesheet"  type='text/css'>
-    <style>
-
-        body {
-            font-family: 'Montserrat', sans-serif;
-        }
-
-        .sidenav {
-            width: 250px;
-            z-index: 1;
-            top:50px;
-            left: 100px;
-            background: #eee;
-            overflow-x: hidden;
-            padding: 8px 0;
-
-        }
-
-        .sidenav a {
-            padding: 6px 8px 6px 16px;
-            text-decoration: none;
-            font-size: 15px;
-            color: #2196F3;
-            display: block;
-            border-style: solid;
-            border-width: 1px;
-        }
-
-        .sidenav a:hover {
-            color: #064579;
-        }
-
-        .main {
-            margin-left: 140px; /* Same width as the sidebar + left position in px */
-            font-size: 28px; /* Increased text to enable scrolling */
-            padding: 0px 10px;
-        }
-
-        img {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            padding:10px;
-        }
-
-        #notice_bar1{
-            background: #eee;
-            top:50px;
-            margin:0px;
-        }
-
-        #upcoming_events{
-            background: #2196F3;
-            padding:10px;
-            margin:0px;
-        }
-
-        #para{
-            background: #c4c4c4;
-            padding:10px;
-        }
-
-        #notification_sidebar{
-            left:1000px;
-        }
-
-        #notices{
-            background: #2196F3;
-            padding:10px;
-            margin:0px;
-        }
-
-    </style>
-</head>
-
-<body>
-<!-- Navigation -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container">
-        <a class="navbar-brand" href="/logged">Examination Division</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Services</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Contact Us</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="/">Logout
-                        <span class="sr-only">(current)</span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-<div class="container">
-
-    <div class="row">
-        <div class="col-sm-3">
-            <!--fixed side bar -->
-            <div class="sidenav">
-                <img src="http://www.coursemaster.lk/wp-content/uploads/2014/08/484258_216944238425537_2046733636_n.jpg" alt="logo" style="width:150px;height:150px;" >
-                <ul style="list-style-type:none">
-                    <li><a href="#">My profile</a></li>
-                    <li><a href="/repeat/register">Online Registration & Exam Payment System</a></li>
-                    <li><a href="#">Subject structure & fees</a></li>
-                    <li><a href="/calendar">Exam calendar</a></li>
-                    <li><a href="#">Apply for recorrection</a></li>
-                    <li><a href="#">Examination Results</a></li>
-                    <li><a href="#">Take an Exam</a></li>
-                    <li><a href="/repeat">Take repeat exam</a></li>
-                    <li><a href="/downloads">Downloads</a></li>
-                    <li><a href="#">Scholarships</a></li>
-                    <li><a href="#">Contact Us</a></li>
-                </ul>
-            </div>
-        </div>
+<%include partials/headerStudent.ejs%>
 
         <div class="col-sm-6">
-            <h2 class="mt-4">Online Examination Registration</h2>
-            <p>To register for an examination, please use the REGISTER button.</p>
-            <a class="btn btn-primary btn-lg" href="/reg"> Register </a>
+            <h2 class="mt-4">Online Module Registration</h2>
+            <p>To register for modules, please select the semester.</p>
+            <form action="/reg/<%=user._id%>" method="post">
+                <div class="form-group">
+                    <select name="semester" data-style="btn-info" class="selectpicker" required>
+                        <option value=1>Semester 1</option>
+                        <option value=2>Semester 2</option>
+                        <option value=3>Semester 3</option>
+                        <option value=4>Semester 4</option>
+                        <option value=5>Semester 5</option>
+                        <option value=6>Semester 6</option>
+                        <option value=7>Semester 7</option>
+                        <option value=8>Semester 8</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-success">Submit</button>
+            </form>
+
             <br></br>
-            <h6 style="text-decoration:underline; font-weight:bold;">Other Information </h6>
+            
 
         </div>
 
@@ -177,10 +49,4 @@
     </div>
 </div>
 <!-- Footer -->
-<footer class="py-5 bg-dark">
-    <div class="container">
-        <p class="m-0 text-center text-white">Copyright &copy; Examination Division - University of Moratuwa</p>
-    </div>
-    <!-- /.container -->
-</footer>
-</body>
+<%include partials/footer.ejs%>

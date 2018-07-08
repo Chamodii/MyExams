@@ -1,6 +1,7 @@
 <%include partials/headerAdmin.ejs%>
 
         <div class="col-sm-6">
+            <h2> Student Details</h2>
             <div class="table">
                 <table class="masterlist">
                     <tr>
@@ -10,6 +11,7 @@
                         <th>Faculty</th>
                         <th>Degree/Course</th>
                         <th>Batch</th>
+                        <th>Department</th>
 
                     </tr>
 
@@ -22,6 +24,7 @@
                         <th><%= user.faculty %></th>
                         <th><%= user.degree %></th>
                         <th><%= user.batch %></th>
+                        <th><%= user.department%></th>
                         <th><a href="/editStudent/<%=user._id%>" role="button" class="btn btn-primary">Edit</a></th>
                         <th>
                             <form action="/deleteStudent/<%=user._id%>" method="post">
