@@ -19,9 +19,8 @@
                         <th><%= module.code %></th>
                         <th><%= module.department %></th>
                         <th><%= module.semester %></th>
-                        <th><a href="/" role="button" class="btn btn-primary">Edit</a></th>
                         <th>
-                            <form action="/" method="post">
+                            <form action="/deleteModule/<%=module._id%>" method="post">
                                 <button class="btn btn-danger">Delete</button>
                             </form></th>
 

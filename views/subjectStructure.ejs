@@ -1,0 +1,38 @@
+<%include partials/headerStudent.ejs%>
+
+<div class="col-sm-6">
+    <h2> Subject Structure</h2>
+    <div class="table">
+        <table class="masterlist">
+            <tr>
+                <th>Module Code</th>
+                <th>Module Name</th>
+                <th>Semester</th>
+            </tr>
+
+
+            <% modules.forEach(function(module){ %>
+            <tr>
+                <th><%= module.code %>></th>
+                <th><%= module.name %></th>
+                <th><%= module.semester %></th>
+
+
+
+            </tr>
+            <% });%>
+
+
+
+
+        </table>
+    </div>
+
+</div>
+
+
+
+</div>
+</div>
+
+<%include partials/footer.ejs%>

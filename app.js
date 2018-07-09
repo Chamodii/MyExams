@@ -165,6 +165,7 @@ app.post('/reg/:id',function (req,res) {
 
 app.post('/registerExams/:id',function (req,res) {
     //res.send(req.body.module);
+    //var newModule = new Module(req.body.module);
     User.update({_id:req.params.id},{modules:req.body.module},function(err,user) {
         if(err){
             console.log(err);
@@ -253,6 +254,16 @@ app.post('/registerModule',function(req,res){
        }
     });
 
+});
+
+app.post('/deleteModule/:id',function (req,res) {
+    Module.remove({_id:req.params.id},function (err,module) {
+        if(err){
+            console.log(err);
+        }else{
+            res.redirect("/viewDepartments");
+        }
+    });
 });
 
 app.get('/viewStudents',function (req,res) {
@@ -520,5 +531,30 @@ app.get('/about',function (req,res) {
 
 app.get('/contact',function (req,res) {
    res.render('contactus');
+});
+
+var moduleObjects=[];
+app.get('/subjectStructure',function (req,res) {
+    var modules= req.user.modules;
+    console.log(modules[0]);
+    // var moduleObjects=[];
+    modules.forEach(function (moduleCode) {
+
+        Module.findOne({code:moduleCode},function (err,module) {
+
+            if(err){
+                console.log(err);
+            }
+            else{
+                var moduledata = [module.name,module.code,module.department];
+                console.log(module);
+                moduleObjects.push(moduledata);
+
+            }
+        });
+
+    });
+    console.log(moduleObjects);
+    res.render('subjectStructure',{modules:moduleObjects});
 });
 app.listen(3000);
