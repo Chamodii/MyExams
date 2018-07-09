@@ -178,19 +178,27 @@ app.get('/registerModule',function (req,res) {
 });
 
 app.post('/registerStudent',function (req,res) {
-    var newUser = new User({firstName: req.body.firstName,lastName:req.body.lastName,username:req.body.username,DOB:req.body.DOB,batch:req.body.batch,role:"Student",department:req.body.department,faculty:req.body.faculty,NIC:req.body.NIC,degree:req.body.degree});
-    User.register(newUser, req.body.password, function(err,user){
-        if(err){
-            console.log(err);
-            req.flash('userExists','User already exists!');
-            res.redirect('/registerStudent');
-        }
-        passport.authenticate('local')(req,res,function(){
-            //This should be redirected to admin home
-            console.log("User successfully created");
-            res.redirect("/viewStudents");
+    var today = new Date();
+    var DOB = new Date(req.body.DOB);
+    if(today>DOB){
+        var newUser = new User({firstName: req.body.firstName,lastName:req.body.lastName,username:req.body.username,DOB:req.body.DOB,batch:req.body.batch,role:"Student",department:req.body.department,faculty:req.body.faculty,NIC:req.body.NIC,degree:req.body.degree});
+        User.register(newUser, req.body.password, function(err,user){
+            if(err){
+                console.log(err);
+                req.flash('userExists','User already exists!');
+                res.redirect('/registerStudent');
+            }
+            passport.authenticate('local')(req,res,function(){
+                //This should be redirected to admin home
+                console.log("User successfully created");
+                res.redirect("/viewStudents");
+            });
         });
-    });
+    }
+    else{
+        req.flash('userExists','Invalid Date of Birth');
+        res.redirect('/registerStudent');
+    }
 });
 
 app.post('/registerModule',function(req,res){
