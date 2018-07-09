@@ -1,0 +1,85 @@
+<%include partials/headerAdmin.ejs%>
+<div class="col-sm-6">
+    <h2>Register New Lecturer</h2>
+    <form action="/setCalendar" method="POST">
+        <div class="form-group alert">
+            <strong>
+                <%if(message){%>
+                <p class="text-danger"><%=message%></p>
+                <%}%>
+            </strong>
+        </div>
+        <div>
+            <label for="module" style="padding: 10px">Module:</label>
+            <select name="module" data-style="btn-info" class="selectpicker" required>
+                <% modules.forEach(function(module){ %>
+                <option value="<%=module%>"><%=module.name%></option>
+                <% });%>
+            </select>
+        </div>
+
+        <div>
+            <label for="date" style="padding: 10px">Date of Exam:</label>
+            <input type="date" name="date" placeholder="dd/mm/yyyy">
+        </div>
+
+        <div>
+            <label for="timeHours" style="padding: 10px">Hour:</label>
+            <select name="timeHours" data-style="btn-info" class="selectpicker" required>
+                <option value="07">07</option>
+                <option value="08">08</option>
+                <option value="09">09</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+                <option value="17">17</option>
+                <option value="18">18</option>
+                <option value="19">19</option>
+                <option value="20">20</option>
+
+            </select>
+            <label for="timeMins" style="padding: 10px">Mins:</label>
+            <select name="timeMins" data-style="btn-info" class="selectpicker" required>
+                <option value="00">00</option>
+                <option value="15">15</option>
+                <option value="30">30</option>
+                <option value="45">45</option>
+            </select>
+        </div>
+
+        <div>
+            <label for="venue" style="padding: 10px">Venue:</label>
+            <input type="text" name="venue" placeholder="Old Gym">
+        </div>
+        <button>Submit</button>
+
+    </form>
+
+</div>
+
+<div class="col-sm-3 sidebar content-box" style="background-color:#eee;">
+    <ul class="nav">
+        <li>
+            <h5 class="mt-3" id="upcoming_events">Upcoming Events<span onclick="document.getElementById('notice_bar1').style.display='none'" class="close" data-dismiss="alert" position="left">&times;</button></h5>
+            <p id="para">The Examinations Division has responsibility for making arrangements for the administration of all public examination</p>
+        </li>
+        <li>
+            <hr></hr>
+            <h5 class="mt-3" id="notices">Notices<span onclick="document.getElementById('notice_bar1').style.display='none'" class="close" data-dismiss="alert" position="left">&times;</button></h5>
+            <p id="para">The Examinations Division has responsibility for making arrangements for the administration of all public examination  </p>
+        </li>
+
+    </ul>
+</div>
+
+</div>
+</div>
+
+
+
+
+<%include partials/footer.ejs%>

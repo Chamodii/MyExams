@@ -34,6 +34,8 @@ mongoose.connect("mongodb://localhost/students_app");
 
 var User = require('./models/user');
 var Module = require('./models/module');
+var Exam = require('./models/exam');
+
 
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
@@ -378,5 +380,39 @@ app.post('/editProfile/:id',function (req,res) {
     });
 });
 
+app.get('/setCalendar',function (req,res) {
+    if(req.user!=null && req.user.role==="Admin"){
+        Module.find({},function(err,modules){
+            if(err){
+                console.log(err);
+            }
+            else{
+                res.render('setCalendar',{modules:modules, message:req.flash('notify')});
+            }
+        });
+    }
+    else{
+        res.redirect('/');
+    }
+});
+
+app.post('/setCalendar',function (req,res) {
+    Exam.find({module:req.body.module},function (err,module) {
+        if(module.length===0){
+            var newExam = new Exam({module:req.body.module,dtae:req.body.date,timeHours:req.body.timeHours,timeMins:req.body.timeMins,venue:req.body.venue});
+            newExam.save(function (err) {
+               if(err){
+                   console.log(err);
+               }
+            });
+            // res.redirect('/viewCalendar');
+            res.send("Successful");
+        }
+        else{
+            req.flash('notify','Exam already exists');
+            res.redirect('/setCalendar');
+        }
+    })
+});
 
 app.listen(3000);
