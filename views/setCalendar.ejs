@@ -13,7 +13,7 @@
             <label for="module" style="padding: 10px">Module:</label>
             <select name="module" data-style="btn-info" class="selectpicker" required>
                 <% modules.forEach(function(module){ %>
-                <option value="<%=module%>"><%=module.name%></option>
+                <option value="<%=module._id%>"><%=module.name%></option>
                 <% });%>
             </select>
         </div>
@@ -78,7 +78,6 @@
 
 </div>
 </div>
-
 
 
 

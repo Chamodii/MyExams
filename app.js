@@ -74,7 +74,9 @@ app.post('/create',function(req,res){
 app.post('/login',passport.authenticate('local',{
     successRedirect:'/logged',
     failureRedirect:'/login'
-}),function(req,res){});
+}),function(req,res){
+    req.flash('userExists','ID or password does not match');
+});
 
 app.get('/logged',function (req,res) {
     var user = req.user;
@@ -405,30 +407,66 @@ app.get('/setCalendar',function (req,res) {
 });
 
 app.post('/setCalendar',function (req,res) {
-    Exam.find({module:req.body.module},function (err,module) {
+    Module.findOne({_id:req.body.module},function (err,module) {
         var today = new Date();
         var examDate = new Date(req.body.date);
-        if(module.length===0){
-            if(examDate>today){
-                var newExam = new Exam({module:req.body.module,dtae:req.body.date,timeHours:req.body.timeHours,timeMins:req.body.timeMins,venue:req.body.venue});
-                newExam.save(function (err) {
-                    if(err){
-                        console.log(err);
-                    }
-                });
-                // res.redirect('/viewCalendar');
-                res.send("Successful");
+        Exam.find({module:module},function(err,exams){
+            if(exams.length===0){
+                if(examDate>today){
+                    var newExam = new Exam({module:module,date:req.body.date,timeHours:req.body.timeHours,timeMins:req.body.timeMins,venue:req.body.venue});
+                    newExam.save(function (err) {
+                        if(err){
+                            console.log(err);
+                        }
+                        else{
+                            res.redirect("/setCalendar");
+                        }
+                    });
+                    // res.redirect('/viewCalendar');
+
+                }
+                else{
+                    req.flash('notify','Invalid date');
+                    res.redirect('/setCalendar');
+                }
             }
             else{
-                res.send("Date not valid!");
+                req.flash('notify','Exam already exists');
+                res.redirect('/setCalendar');
             }
-
-        }
-        else{
-            req.flash('notify','Exam already exists');
-            res.redirect('/setCalendar');
-        }
-    })
+        });
+    });
+    // Exam.find({module:req.body.module},function (err,module) {
+    //
+    //     if(module.length===0){
+    //         if(examDate>today){
+    //             Module.findOne({_id:req.body.module},function (err,module) {
+    //                if(err){
+    //                    console.log(err);
+    //                }
+    //                else{
+    //                    var newExam = new Exam({module:module,date:req.body.date,timeHours:req.body.timeHours,timeMins:req.body.timeMins,venue:req.body.venue});
+    //
+    //                }
+    //             });
+    //
+    //         }
+    //         else{
+    //             res.send("Date not valid!");
+    //         }
+    //
+    //     }
+    //     else{
+    //         req.flash('notify','Exam already exists');
+    //         res.redirect('/setCalendar');
+    //     }
+    // })
 });
 
+app.get('/viewCalendar',function (req,res) {
+    Exam.find({},function (err,exams) {
+        res.render('calendar',{exams:exams});
+    });
+
+});
 app.listen(3000);
