@@ -398,15 +398,23 @@ app.get('/setCalendar',function (req,res) {
 
 app.post('/setCalendar',function (req,res) {
     Exam.find({module:req.body.module},function (err,module) {
+        var today = new Date();
+        var examDate = new Date(req.body.date);
         if(module.length===0){
-            var newExam = new Exam({module:req.body.module,dtae:req.body.date,timeHours:req.body.timeHours,timeMins:req.body.timeMins,venue:req.body.venue});
-            newExam.save(function (err) {
-               if(err){
-                   console.log(err);
-               }
-            });
-            // res.redirect('/viewCalendar');
-            res.send("Successful");
+            if(examDate>today){
+                var newExam = new Exam({module:req.body.module,dtae:req.body.date,timeHours:req.body.timeHours,timeMins:req.body.timeMins,venue:req.body.venue});
+                newExam.save(function (err) {
+                    if(err){
+                        console.log(err);
+                    }
+                });
+                // res.redirect('/viewCalendar');
+                res.send("Successful");
+            }
+            else{
+                res.send("Date not valid!");
+            }
+
         }
         else{
             req.flash('notify','Exam already exists');
