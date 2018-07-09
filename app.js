@@ -533,27 +533,32 @@ app.get('/contact',function (req,res) {
    res.render('contactus');
 });
 
-var moduleObjects=[];
+// var moduleObjects=[];
 app.get('/subjectStructure',function (req,res) {
+    var moduleObjects = new Array();
     var modules= req.user.modules;
     console.log(modules[0]);
     // var moduleObjects=[];
-    modules.forEach(function (moduleCode) {
-
-        Module.findOne({code:moduleCode},function (err,module) {
+    // modules.forEach(function (moduleCode) {
+    for(var i=0 ;i<modules.length ;i++){
+        var mode = Module.findOne({code:modules[i]},function (err,module) {
 
             if(err){
                 console.log(err);
             }
             else{
-                var moduledata = [module.name,module.code,module.department];
-                console.log(module);
-                moduleObjects.push(moduledata);
+                // var moduledata = [module.name,module.code,module.department];
+                // // console.log(module);
+                // // moduleObjects.push(moduledata);
+                // return module;
+                moduleObjects[i]= module;
 
             }
         });
+        // console.log(mode);
 
-    });
+    }
+
     console.log(moduleObjects);
     res.render('subjectStructure',{modules:moduleObjects});
 });
