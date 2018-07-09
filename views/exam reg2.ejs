@@ -2,9 +2,9 @@
         <div class="col-sm-6">
             <h2 class="mt-4">Online Examination Registration</h2>
             <p> Enter your details</p>
-            <form action="/" method="post">
+            <form action="/registerExams/<%=user._id%>" method="post">
                 <%modules.forEach(function(module){%>
-                    <input type="checkbox" name="module" value="<%module.code%>"><%=module.code%> <%=module.name%><br>
+                    <input type="checkbox" name="module" value="<%=module%>"><%=module.code%> <%=module.name%><br>
                 <%})%>
                 <input type="submit" value="Submit">
             </form>

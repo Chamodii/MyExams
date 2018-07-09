@@ -14,7 +14,7 @@ var UserSchema = new mongoose.Schema({
     batch: Number,
     faculty: String,
     degree: String,
-    modules: [{type :mongoose.Schema.Types.ObjectId, ref:'Module'}]
+    modules: []
 });
 //plugin the sub modules to the parent one
 

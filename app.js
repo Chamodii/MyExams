@@ -142,16 +142,18 @@ app.post('/reg/:id',function (req,res) {
        }
        else{
            Module.find({department: user.department,semester:req.body.semester},function (err,modules) {
-               res.render('exam reg2',{modules:modules});
+               res.render('exam reg2',{modules:modules,user:user});
            })
        }
    })
 });
 
 app.post('/registerExams/:id',function (req,res) {
+    //res.send(req.body.module);
     User.update({_id:req.params.id},{modules:req.body.module},function(err,user) {
         if(err){
             console.log(err);
+
         }else{
             res.redirect('/logged');
         }
