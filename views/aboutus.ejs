@@ -8,8 +8,6 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-
-    <! bootstrap>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
     <! google fonts>
@@ -20,11 +18,9 @@
             href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.css"
             rel="stylesheet"  type='text/css'>
     <style>
-
         body {
             font-family: 'Montserrat', sans-serif;
         }
-
         .sidenav {
             width: 250px;
             z-index: 1;
@@ -33,9 +29,7 @@
             background: #eee;
             overflow-x: hidden;
             padding: 8px 0;
-
         }
-
         .sidenav a {
             padding: 6px 8px 6px 16px;
             text-decoration: none;
@@ -44,53 +38,47 @@
             display: block;
             border-style: solid;
             border-width: 1px;
-            margin-right: 33px;
         }
-
         .sidenav a:hover {
             color: #064579;
         }
-
         .main {
             margin-left: 140px; /* Same width as the sidebar + left position in px */
             font-size: 28px; /* Increased text to enable scrolling */
             padding: 0px 10px;
         }
-
         img {
             display: block;
             margin-left: auto;
             margin-right: auto;
             padding:10px;
         }
-
         #notice_bar1{
             background: #eee;
             top:50px;
             margin:0px;
         }
-
         #upcoming_events{
             background: #2196F3;
             padding:10px;
             margin:0px;
         }
-
         #para{
             background: #c4c4c4;
             padding:10px;
+            font-size:15px;
         }
-
-        #notification_sidebar{
-            left:1000px;
-        }
-
         #notices{
             background: #2196F3;
             padding:10px;
             margin:0px;
         }
-
+        #month{
+            padding:3px;
+        }
+        #related{
+            padding:10px;
+        }
     </style>
 </head>
 
@@ -105,10 +93,13 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/about">About</a>
+                    <a class="nav-link" href="#">About</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/contact">Contact Us</a>
+                    <a class="nav-link" href="#">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Contact Us</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="/">Logout
@@ -120,16 +111,16 @@
     </div>
 </nav>
 
+<!--sidenav-->
 <div class="container">
 
     <div class="row">
         <div class="col-sm-3">
-            <!--fixed side bar -->
             <div class="sidenav">
-                <img src="http://www.coursemaster.lk/wp-content/uploads/2014/08/484258_216944238425537_2046733636_n.jpg" alt="logo" style="width:150px;height:150px;">
+                <img src="http://www.coursemaster.lk/wp-content/uploads/2014/08/484258_216944238425537_2046733636_n.jpg" alt="logo" style="width:150px;height:150px;" >
                 <ul style="list-style-type:none">
-                    <li><a href="/editProfile">My profile</a></li>
-                    <li><a href="/reg">Module Registration</a></li>
+                    <li><a href="#">My profile</a></li>
+                    <li><a href="/repeat/register">Online Registration & Exam Payment System</a></li>
                     <li><a href="#">Subject structure & fees</a></li>
                     <li><a href="/calendar">Exam calendar</a></li>
                     <li><a href="#">Apply for recorrection</a></li>
@@ -138,6 +129,57 @@
                     <li><a href="/repeat">Take repeat exam</a></li>
                     <li><a href="/downloads">Downloads</a></li>
                     <li><a href="#">Scholarships</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            <div >
+                <ul class="nav">
+                    <li>
+                        <h5 class="mt-3" id="upcoming_events">Upcoming Events<span onclick="document.getElementById('notice_bar1').style.display='none'" class="close" data-dismiss="alert" position="left">&times;</span></h5>
+                        <p id="para">The Examinations Division has responsibility for making arrangements for the administration of all public examination</p>
+                    </li>
+                    <li>
+                        <hr></hr>
+                        <h5 class="mt-3" id="notices">Notices<span onclick="document.getElementById('notice_bar1').style.display='none'" class="close" data-dismiss="alert" position="left">&times;</span></h5>
+                        <p id="para">The Examinations Division has responsibility for making arrangements for the administration of all public examination  </p>
+                    </li>
+                    <li>
+                        <hr></hr>
+                        <h6 id="related"> Related Services</h6>
+                        <ul style="list-style-type:none">
+                            <li style="font-size:12px;"><a href="#">Results</a><li>
+                            <li style="font-size:12px;"><a href="#">Module Registration</a></li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </div>
+        <!--main-->
+        <div class="col-sm-9" >
+            <h2 class="mt-4">Examination & Registration Division</h2>
+            <h4> MyExams</h4>
+            <hr></hr>
+
+            <div class="carousel-inner">
+                <img src="https://www.mrt.ac.lk/web/sites/default/files/styles/mt_slideshow/public/exams/slideshow/slide3.jpg?itok=OYeUizlp" >
+            </div>
+
+            <h3 style="padding: 10px">WELCOME TO EXAMINATION DIVISION</h3>
+
+            <div>
+                <p>
+                    Examinations & Registration Division provides various important student related services such as Student Registration,
+                    Undergraduate and Postgraduate Examinations Related Activities, Conducting Aptitude Tests, Issuing Examination Results,
+                    Issuing Academic Transcripts and Degree Certificates etc.
+                </p>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+</div>
+<!-- Footer -->
+<%include partials/footer.ejs%>
+

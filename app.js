@@ -53,19 +53,30 @@ app.get('/login',function (req,res) {
 app.post('/create',function(req,res){
     var newUser = new User({firstName: req.body.firstName,lastName:req.body.lastName,username:req.body.username,email:req.body.email});
     if(req.body.role==="admin123"){
-        newUser.role="Admin";
-        User.register(newUser, req.body.password, function(err,user){
-            if(err){
-                console.log(err);
-                req.flash('userExists','User already exists!');
-                res.redirect('/login');
-            }
-            passport.authenticate('local')(req,res,function(){
-                //This should be redirected to admin home
-                console.log("Admin successfully created");
-                //res.redirect("/logged");
+        var index=req.body.username;
+        if(isNaN(index.substring(index.length-1,index.length)) && !isNaN(index.substring(0,index.length - 1))){
+            newUser.role="Admin";
+            User.register(newUser, req.body.password, function(err,user){
+                if(err){
+                    console.log(err);
+                    req.flash('userExists','User already exists!');
+                    res.redirect('/login');
+                }
+                passport.authenticate('local')(req,res,function(){
+                    //This should be redirected to admin home
+                    console.log("Admin successfully created");
+                    res.redirect("/logged");
+                });
             });
-        });
+        }else{
+            req.flash('userExists','Incorrect ID');
+            res.redirect('/login');
+        }
+
+    }
+    else{
+        req.flash('userExists','Incorrect signup');
+        res.redirect('/login');
     }
 
 
@@ -182,25 +193,42 @@ app.get('/registerModule',function (req,res) {
 app.post('/registerStudent',function (req,res) {
     var today = new Date();
     var DOB = new Date(req.body.DOB);
-    if(today>DOB){
-        var newUser = new User({firstName: req.body.firstName,lastName:req.body.lastName,username:req.body.username,DOB:req.body.DOB,batch:req.body.batch,role:"Student",department:req.body.department,faculty:req.body.faculty,NIC:req.body.NIC,degree:req.body.degree});
-        User.register(newUser, req.body.password, function(err,user){
-            if(err){
-                console.log(err);
-                req.flash('userExists','User already exists!');
+    var index = req.body.username;
+    if(isNaN(index.substring(index.length-1,index.length)) && !isNaN(index.substring(0,index.length - 1))){
+        if(today>DOB){
+            var nic = req.body.NIC;
+            if(nic.substring(nic.length-1,nic.length).toLowerCase() === 'v' && !isNaN(nic.substring(0,nic.length - 1)) ){
+                var newUser = new User({firstName: req.body.firstName,lastName:req.body.lastName,username:req.body.username,DOB:req.body.DOB,batch:req.body.batch,role:"Student",department:req.body.department,faculty:req.body.faculty,NIC:req.body.NIC,degree:req.body.degree});
+                User.register(newUser, req.body.password, function(err,user){
+                    if(err){
+                        console.log(err);
+                        req.flash('userExists','User already exists!');
+                        res.redirect('/registerStudent');
+                    }
+                    passport.authenticate('local')(req,res,function(){
+                        //This should be redirected to admin home
+                        console.log("User successfully created");
+                        res.redirect("/viewStudents");
+                    });
+                });
+            }
+            else{
+                req.flash('userExists','Invalid NIC');
                 res.redirect('/registerStudent');
             }
-            passport.authenticate('local')(req,res,function(){
-                //This should be redirected to admin home
-                console.log("User successfully created");
-                res.redirect("/viewStudents");
-            });
-        });
+
+
+        }
+        else{
+            req.flash('userExists','Invalid Date of Birth');
+            res.redirect('/registerStudent');
+        }
     }
-    else{
-        req.flash('userExists','Invalid Date of Birth');
+    else {
+        req.flash('userExists','Invalid ID');
         res.redirect('/registerStudent');
     }
+
 });
 
 app.post('/registerModule',function(req,res){
@@ -312,18 +340,34 @@ app.get('/registerLecturer',function (req,res) {
 
 app.post('/registerLecturer',function (req,res){
     var data={firstName:req.body.firstName, lastName:req.body.lastName,department:req.body.department,role:'Lecturer',username:req.body.username, NIC:req.body.NIC,faculty:req.body.faculty};
-    User.register(data, req.body.password, function(err,user){
-        if(err){
-            console.log(err);
-            req.flash('userExists','User already exists!');
+    var index = req.body.username;
+    var nic = req.body.NIC;
+    if(isNaN(index.substring(index.length-1,index.length)) && !isNaN(index.substring(0,index.length - 1))){
+        if(nic.substring(nic.length-1,nic.length).toLowerCase() === 'v' && !isNaN(nic.substring(0,nic.length - 1))){
+            User.register(data, req.body.password, function(err,user){
+                if(err){
+                    console.log(err);
+                    req.flash('userExists','User already exists!');
+                    res.redirect('/registerLecturer');
+                }
+                passport.authenticate('local')(req,res,function(){
+                    //This should be redirected to admin home
+                    console.log("User successfully created");
+                    res.redirect("/viewLecturers");
+                });
+            });
+        }
+        else{
+            req.flash('userExists','Invalid NIC');
             res.redirect('/registerLecturer');
         }
-        passport.authenticate('local')(req,res,function(){
-            //This should be redirected to admin home
-            console.log("User successfully created");
-            res.redirect("/viewLecturers");
-        });
-    });
+
+    }
+    else{
+        req.flash('userExists','Invalid ID');
+        res.redirect('/registerLecturer');
+    }
+
 
 });
 
@@ -468,5 +512,13 @@ app.get('/viewCalendar',function (req,res) {
         res.render('calendar',{exams:exams});
     });
 
+});
+
+app.get('/about',function (req,res) {
+    res.render('aboutus');
+});
+
+app.get('/contact',function (req,res) {
+   res.render('contactus');
 });
 app.listen(3000);

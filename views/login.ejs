@@ -44,8 +44,13 @@
 </header>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-6 justify-content-center">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-4 justify-content-center">
             <form action="/login" method="post">
+                <h2>LOGIN</h2>
+                <div class="form-group alert">
+
+                </div>
                 <div class="form-group" >
                     <input type="text" name="username" placeholder="ID">
                 </div>
@@ -63,6 +68,7 @@
         </div>
         <div class="col-lg-6">
             <form action="/create" method="post">
+                <h2>ADMIN SIGNUP</h2>
                 <div class="form-group alert">
                     <strong>
                         <%if(message){%>
@@ -72,24 +78,24 @@
                 </div>
 
                 <div  class="form-group">
-                    <input type="text" name="firstName" placeholder="First Name">
-                    <input type="text" name="lastName" placeholder="Last Name">
-                </div>
-                <div class="form-group">
-                    <input type="text" name="username" placeholder="ID">
-                </div>
-                <div class="form-group">
-                    <input type="email" name="email" placeholder="Email">
-                </div>
-                <div class="form-group">
-                    <input type="password" name="password" placeholder="Password">
-                </div>
-                <div class="form-group">
-                    <input type="text" name="role" placeholder="Admin code">
-                </div>
+                    <input type="text" name="firstName" placeholder="First Name" required>
 
-
-
+                </div>
+                <div class="form-group">
+                    <input type="text" name="lastName" placeholder="Last Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="username" placeholder="ID" required maxlength="7" minlength="7">
+                </div>
+                <!--<div class="form-group">-->
+                    <!--<input type="email" name="email" placeholder="Email">-->
+                <!--</div>-->
+                <div class="form-group">
+                    <input type="password" name="password" placeholder="Password" required>
+                </div>
+                <div class="form-group">
+                    <input type="password" name="role" placeholder="Admin code" required>
+                </div>
 
 
                 <p>
