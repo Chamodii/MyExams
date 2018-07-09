@@ -299,7 +299,7 @@ app.get('/registerLecturer',function (req,res) {
 });
 
 app.post('/registerLecturer',function (req,res){
-    var data={firstName:req.body.firstName, lastname:req.body.lastName,department:req.body.department,role:'Lecturer',username:req.body.username, NIC:req.body.NIC,faculty:req.body.faculty};
+    var data={firstName:req.body.firstName, lastName:req.body.lastName,department:req.body.department,role:'Lecturer',username:req.body.username, NIC:req.body.NIC,faculty:req.body.faculty};
     User.register(data, req.body.password, function(err,user){
         if(err){
             console.log(err);
