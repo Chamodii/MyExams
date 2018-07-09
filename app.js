@@ -35,6 +35,7 @@ mongoose.connect("mongodb://localhost/students_app");
 var User = require('./models/user');
 var Module = require('./models/module');
 var Exam = require('./models/exam');
+var Registered = require('./models/registeredmodule');
 
 
 passport.use(new LocalStrategy(User.authenticate()));
@@ -163,17 +164,30 @@ app.post('/reg/:id',function (req,res) {
    })
 });
 
-app.post('/registerExams/:id',function (req,res) {
+app.post('/registerExams/:userid/:moduleid',function (req,res) {
+    Module.findOne({code:req.params.moduleid},function (err,module) {
+       if(err){
+           console.log(err);
+       } else{
+           var newExam=new Registered({ID:req.params.userid,name:module.name,code:module.code,semester:module.semester});
+           newExam.save(function (err) {
+               if(err){
+                   return res.status(500).send(err);
+               }
+               res.redirect('/reg/'+req.params.userid);
+           });
+       }
+    });
     //res.send(req.body.module);
     //var newModule = new Module(req.body.module);
-    User.update({_id:req.params.id},{modules:req.body.module},function(err,user) {
-        if(err){
-            console.log(err);
-
-        }else{
-            res.redirect('/logged');
-        }
-    });
+    // User.update({_id:req.params.id},{modules:req.body.module},function(err,user) {
+    //     if(err){
+    //         console.log(err);
+    //
+    //     }else{
+    //         res.redirect('/logged');
+    //     }
+    // });
 });
 
 app.get('/registerStudent',function (req,res) {
