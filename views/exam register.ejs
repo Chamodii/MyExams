@@ -3,7 +3,7 @@
         <div class="col-sm-6">
             <h2 class="mt-4">Online Module Registration</h2>
             <p>To register for modules, please select the semester.</p>
-            <form action="/reg/<%=user._id%>" method="post">
+            <form action="/reg/<%=user.username%>" method="post">
                 <div class="form-group">
                     <select name="semester" data-style="btn-info" class="selectpicker" required>
                         <option value=1>Semester 1</option>

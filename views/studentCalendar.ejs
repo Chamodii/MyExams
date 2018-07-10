@@ -1,0 +1,45 @@
+<%include partials/headerStudent.ejs%>
+
+<div class="col-sm-6">
+    <h2> Student Details</h2>
+    <div class="table">
+        <table class="masterlist">
+            <tr>
+                <th>Full Name</th>
+                <th>ID</th>
+                <th>NIC</th>
+                <th>Faculty</th>
+                <th>Degree/Course</th>
+                <th>Batch</th>
+                <th>Department</th>
+
+            </tr>
+
+
+            <% users.forEach(function(user){ %>
+            <tr>
+                <th><%= user.firstName %> <%= user.lastName%></th>
+                <th><%= user.username %></th>
+                <th><%= user.NIC %></th>
+                <th><%= user.faculty %></th>
+                <th><%= user.degree %></th>
+                <th><%= user.batch %></th>
+                <th><%= user.department%></th>
+
+            </tr>
+            <% });%>
+
+
+
+
+        </table>
+    </div>
+
+</div>
+
+
+
+</div>
+</div>
+
+<%include partials/footer.ejs%>

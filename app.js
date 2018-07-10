@@ -7,6 +7,7 @@ var passport = require("passport");
 var LocalStrategy = require('passport-local');
 var passportLocalMongoose = require('passport-local-mongoose');
 var flash = require('connect-flash');
+var validator = require("validator");
 
 
 var app = express();
@@ -44,6 +45,7 @@ passport.deserializeUser(User.deserializeUser());
 
 
 app.get('/',function (req,res) {
+    req.logout();
     res.render("home");
 });
 
@@ -101,7 +103,7 @@ app.get('/logged',function (req,res) {
             res.render('userhome',{user:user});
         }
         else if(user.role==="Lecturer"){
-            res.send("I am a lecturer");
+            res.render('lecturerhome');
         }
 
     }
@@ -121,7 +123,15 @@ app.get('/editProfile',function (req,res) {
 
 app.get('/calendar',function (req,res) {
     var user = req.user;
-    res.render('calendar',{user:user});
+    Exam.find({department:user.department},function (err,exams) {
+        if(err){
+            console.log(err);
+        }
+        else{
+            res.render('calendar',{exams:exams});
+        }
+    });
+
 });
 
 app.get('/downloads',function (req,res) {
@@ -137,14 +147,10 @@ app.get('/repeat/view',function (req,res) {
     res.render('repeat view.ejs');
 });
 
-//This should be altered to post repeat : pass the data from repeat form
-// app.get('/repeat/register',function (req,res) {
-//     res.render('exam register');
-// });
 
 app.get('/reg',function (req,res) {
     if(req.user!=null && req.user.role==='Student'){
-        res.render('exam register',{user:req.user});
+        res.render('exam register',{user:req.user, message: req.flash('notify')});
     }
     else{
         res.redirect('/');
@@ -152,7 +158,7 @@ app.get('/reg',function (req,res) {
 });
 
 app.post('/reg/:id',function (req,res) {
-   User.findOne({_id:req.params.id},function (err,user) {
+   User.findOne({username:req.params.id},function (err,user) {
        if(err){
            console.log(err);
        }
@@ -169,25 +175,30 @@ app.post('/registerExams/:userid/:moduleid',function (req,res) {
        if(err){
            console.log(err);
        } else{
-           var newExam=new Registered({ID:req.params.userid,name:module.name,code:module.code,semester:module.semester});
-           newExam.save(function (err) {
+           Registered.find({ID:req.params.userid,code:req.params.moduleid},function (err,regs) {
                if(err){
-                   return res.status(500).send(err);
+                   console.log(err);
                }
-               res.redirect('/reg/'+req.params.userid);
+               else{
+                   if(regs.length===0){
+                       var newExam=new Registered({ID:req.params.userid,name:module.name,code:module.code,semester:module.semester});
+                       newExam.save(function (err) {
+                           if(err){
+                               return res.status(500).send(err);
+                           }
+                           res.redirect('/reg');
+                       });
+                   }
+                   else{
+                       req.flash('notify','Module already registered');
+                       res.redirect('/reg');
+                   }
+               }
            });
+
        }
     });
-    //res.send(req.body.module);
-    //var newModule = new Module(req.body.module);
-    // User.update({_id:req.params.id},{modules:req.body.module},function(err,user) {
-    //     if(err){
-    //         console.log(err);
-    //
-    //     }else{
-    //         res.redirect('/logged');
-    //     }
-    // });
+
 });
 
 app.get('/registerStudent',function (req,res) {
@@ -209,64 +220,80 @@ app.post('/registerStudent',function (req,res) {
     var today = new Date();
     var DOB = new Date(req.body.DOB);
     var index = req.body.username;
-    if(isNaN(index.substring(index.length-1,index.length)) && !isNaN(index.substring(0,index.length - 1))){
-        if(today>DOB){
-            var nic = req.body.NIC;
-            if(nic.substring(nic.length-1,nic.length).toLowerCase() === 'v' && !isNaN(nic.substring(0,nic.length - 1)) ){
-                var newUser = new User({firstName: req.body.firstName,lastName:req.body.lastName,username:req.body.username,DOB:req.body.DOB,batch:req.body.batch,role:"Student",department:req.body.department,faculty:req.body.faculty,NIC:req.body.NIC,degree:req.body.degree});
-                User.register(newUser, req.body.password, function(err,user){
-                    if(err){
-                        console.log(err);
-                        req.flash('userExists','User already exists!');
-                        res.redirect('/registerStudent');
-                    }
-                    passport.authenticate('local')(req,res,function(){
-                        //This should be redirected to admin home
-                        console.log("User successfully created");
-                        res.redirect("/viewStudents");
+    if(validator.isAlpha(req.body.firstName)  && validator.isAlpha(req.body.lastName)) {
+        if(isNaN(index.substring(index.length-1,index.length)) && !isNaN(index.substring(0,index.length - 1))){
+            if(today>DOB){
+                var nic = req.body.NIC;
+                if(nic.substring(nic.length-1,nic.length).toLowerCase() === 'v' && !isNaN(nic.substring(0,nic.length - 1)) ){
+                    var newUser = new User({firstName: req.body.firstName,lastName:req.body.lastName,username:req.body.username,DOB:req.body.DOB,batch:req.body.batch,role:"Student",department:req.body.department,faculty:req.body.faculty,NIC:req.body.NIC,degree:req.body.degree});
+                    User.register(newUser, req.body.password, function(err,user){
+                        if(err){
+                            console.log(err);
+                            req.flash('userExists','User already exists!');
+                            res.redirect('/registerStudent');
+                        }
+                        passport.authenticate('local')(req,res,function(){
+                            //This should be redirected to admin home
+                            console.log("User successfully created");
+                            res.redirect("/viewStudents");
+                        });
                     });
-                });
+                }
+                else{
+                    req.flash('userExists','Invalid NIC');
+                    res.redirect('/registerStudent');
+                }
+
+
             }
             else{
-                req.flash('userExists','Invalid NIC');
+                req.flash('userExists','Invalid Date of Birth');
                 res.redirect('/registerStudent');
             }
-
-
         }
-        else{
-            req.flash('userExists','Invalid Date of Birth');
+        else {
+            req.flash('userExists','Invalid ID');
             res.redirect('/registerStudent');
         }
     }
     else {
-        req.flash('userExists','Invalid ID');
+        req.flash('userExists','Invalid name');
         res.redirect('/registerStudent');
     }
+
+
 
 });
 
 app.post('/registerModule',function(req,res){
-    Module.find({code:req.body.code,department:req.body.department},function (err,modules) {
-       if(err){
-           console.log(err);
-       } else{
-           if(modules.length===0){
-               var newModule=new Module({name:req.body.name, code:req.body.code,semester:req.body.semester,department:req.body.department});
-               newModule.save(function (err) {
-                   if(err){
-                       return res.status(500).send(err);
-                   }
-                   res.redirect('/viewDepartments');
-               });
-           }
-           else{
-               req.flash('notify','Module already exists');
-               res.redirect('/registerModule');
-           }
+    if(validator.isAlpha(req.body.name)){
+        Module.find({code:req.body.code,department:req.body.department},function (err,modules) {
+            if(err){
+                console.log(err);
+            } else{
+                if(modules.length===0){
+                    var newModule=new Module({name:req.body.name, code:req.body.code,semester:req.body.semester,department:req.body.department});
+                    newModule.save(function (err) {
+                        if(err){
+                            return res.status(500).send(err);
+                        }
+                        res.redirect('/viewDepartments');
+                    });
+                }
+                else{
+                    req.flash('notify','Module already exists');
+                    res.redirect('/registerModule');
+                }
 
-       }
-    });
+            }
+        });
+    }
+    else{
+        req.flash('notify','Invalid module name');
+        res.redirect('/registerModule');
+    }
+
+
 
 });
 
@@ -297,31 +324,67 @@ app.get('/editStudent/:id',function (req,res) {
        if(err){
            console.log(err);
        }else{
-           res.render('editStudent',{user:user});
+           res.render('editStudent',{user:user , message: req.flash('userExists')});
        }
    });
 });
 
 app.post('/editStudent/:id',function (req,res){
-    var data={firstName:req.body.firstName,lastName:req.body.lastName,username:req.body.username,DOB:req.body.DOB,batch:req.body.batch,role:"Student",faculty:req.body.faculty,NIC:req.body.NIC,degree:req.body.degree,department:req.body.department};
-   User.remove({_id:req.params.id},function (err,user) {
-       if(err){console.log(err)}
-       else{
-           console.log('Deleted');
+    var today = new Date();
+    var DOB = new Date(req.body.DOB);
+    var index = req.body.username;
+    if(validator.isAlpha(req.body.firstName)  && validator.isAlpha(req.body.lastName)) {
+        if (isNaN(index.substring(index.length - 1, index.length)) && !isNaN(index.substring(0, index.length - 1))) {
+            if (today > DOB) {
+                var nic = req.body.NIC;
+                if (nic.substring(nic.length - 1, nic.length).toLowerCase() === 'v' && !isNaN(nic.substring(0, nic.length - 1))) {
+                    var data={firstName:req.body.firstName,lastName:req.body.lastName,username:req.body.username,DOB:req.body.DOB,batch:req.body.batch,role:"Student",faculty:req.body.faculty,NIC:req.body.NIC,degree:req.body.degree,department:req.body.department};
+                    User.remove({_id:req.params.id},function (err,user) {
+                        if(err){console.log(err)}
+                        else{
+                            console.log('Deleted');
 
-       }
-   });
-    User.register(data, req.body.password, function(err,user){
-        if(err){
-            console.log(err);
-            return res.send("User already exists");
+                        }
+                    });
+                    User.register(data, req.body.password, function(err,user){
+                        if(err){
+                            console.log(err);
+                            return res.send("User already exists");
+                        }
+                        passport.authenticate('local')(req,res,function(){
+                            //This should be redirected to admin home
+                            console.log("User successfully created");
+                            res.redirect("/viewStudents");
+                        });
+                    });
+
+                }
+                else{
+                    req.flash('userExists','Invalid NIC');
+                    res.redirect('/editStudent/'+req.params.id);
+                }
+            }
+            else{
+                req.flash('userExists','Invalid DOB');
+                res.redirect('/editStudent/'+req.params.id);
+            }
         }
-        passport.authenticate('local')(req,res,function(){
-            //This should be redirected to admin home
-            console.log("User successfully created");
-            res.redirect("/viewStudents");
-        });
-    });
+        else{
+            req.flash('userExists','Invalid ID');
+            res.redirect('/editStudent/'+req.params.id);
+        }
+    }
+    else{
+        req.flash('userExists','Invalid name');
+        res.redirect('/editStudent/'+req.params.id);
+    }
+
+
+
+
+
+
+
 });
 
 app.post('/deleteStudent/:id',function (req,res) {
@@ -367,31 +430,39 @@ app.post('/registerLecturer',function (req,res){
     var data={firstName:req.body.firstName, lastName:req.body.lastName,department:req.body.department,role:'Lecturer',username:req.body.username, NIC:req.body.NIC,faculty:req.body.faculty};
     var index = req.body.username;
     var nic = req.body.NIC;
-    if(isNaN(index.substring(index.length-1,index.length)) && !isNaN(index.substring(0,index.length - 1))){
-        if(nic.substring(nic.length-1,nic.length).toLowerCase() === 'v' && !isNaN(nic.substring(0,nic.length - 1))){
-            User.register(data, req.body.password, function(err,user){
-                if(err){
-                    console.log(err);
-                    req.flash('userExists','User already exists!');
-                    res.redirect('/registerLecturer');
-                }
-                passport.authenticate('local')(req,res,function(){
-                    //This should be redirected to admin home
-                    console.log("User successfully created");
-                    res.redirect("/viewLecturers");
+    if (validator.isAlpha(req.body.firstName)  && validator.isAlpha(req.body.lastName) ){
+        if(isNaN(index.substring(index.length-1,index.length)) && !isNaN(index.substring(0,index.length - 1))){
+            if(nic.substring(nic.length-1,nic.length).toLowerCase() === 'v' && !isNaN(nic.substring(0,nic.length - 1))){
+                User.register(data, req.body.password, function(err,user){
+                    if(err){
+                        console.log(err);
+                        req.flash('userExists','User already exists!');
+                        res.redirect('/registerLecturer');
+                    }
+                    passport.authenticate('local')(req,res,function(){
+                        //This should be redirected to admin home
+                        console.log("User successfully created");
+                        res.redirect("/viewLecturers");
+                    });
                 });
-            });
+            }
+            else{
+                req.flash('userExists','Invalid NIC');
+                res.redirect('/registerLecturer');
+            }
+
         }
         else{
-            req.flash('userExists','Invalid NIC');
+            req.flash('userExists','Invalid ID');
             res.redirect('/registerLecturer');
         }
-
     }
     else{
-        req.flash('userExists','Invalid ID');
+        req.flash('userExists','Invalid name');
         res.redirect('/registerLecturer');
     }
+
+
 
 
 });
@@ -412,31 +483,57 @@ app.get('/editLecturer/:id',function (req,res) {
         if(err){
             console.log(err);
         }else{
-            res.render('editLecturer',{user:user});
+            res.render('editLecturer',{user:user ,message: req.flash('userExists')});
         }
     });
 });
 
 app.post('/editLecturer/:id',function (req,res){
-    var data={firstName:req.body.firstName,lastName:req.body.lastName,username:req.body.username,role:"Lecturer",faculty:req.body.faculty,NIC:req.body.NIC,department:req.body.department};
-    User.remove({_id:req.params.id},function (err,user) {
-        if(err){console.log(err)}
-        else{
-            console.log('Deleted');
+    var index = req.body.username;
+    var nic = req.body.NIC;
+    if (validator.isAlpha(req.body.firstName)  && validator.isAlpha(req.body.lastName) ) {
+        if (isNaN(index.substring(index.length - 1, index.length)) && !isNaN(index.substring(0, index.length - 1))) {
+            if (nic.substring(nic.length - 1, nic.length).toLowerCase() === 'v' && !isNaN(nic.substring(0, nic.length - 1))) {
+                var data={firstName:req.body.firstName,lastName:req.body.lastName,username:req.body.username,role:"Lecturer",faculty:req.body.faculty,NIC:req.body.NIC,department:req.body.department};
+                User.remove({_id:req.params.id},function (err,user) {
+                    if(err){console.log(err)}
+                    else{
+                        console.log('Deleted');
 
+                    }
+                });
+                User.register(data, req.body.password, function(err,user){
+                    if(err){
+                        console.log(err);
+                        return res.send("User already exists");
+                    }
+                    passport.authenticate('local')(req,res,function(){
+                        //This should be redirected to admin home
+                        console.log("User successfully created");
+                        res.redirect("/viewLecturers");
+                    });
+                });
+            }
+            else{
+                req.flash('userExists','Invalid NIC');
+                res.redirect('/editLecturer/'+req.params.id);
+            }
         }
-    });
-    User.register(data, req.body.password, function(err,user){
-        if(err){
-            console.log(err);
-            return res.send("User already exists");
+        else{
+            req.flash('userExists','Invalid ID');
+            res.redirect('/editLecturer/'+req.params.id);
         }
-        passport.authenticate('local')(req,res,function(){
-            //This should be redirected to admin home
-            console.log("User successfully created");
-            res.redirect("/viewLecturers");
-        });
-    });
+    }
+    else{
+        req.flash('userExists','Invalid name');
+        res.redirect('/editLecturer/'+req.params.id);
+    }
+
+
+
+
+
+
 });
 
 app.post('/deleteLecturer/:id',function (req,res) {
@@ -479,57 +576,40 @@ app.post('/setCalendar',function (req,res) {
     Module.findOne({_id:req.body.module},function (err,module) {
         var today = new Date();
         var examDate = new Date(req.body.date);
-        Exam.find({module:module},function(err,exams){
-            if(exams.length===0){
-                if(examDate>today){
-                    var newExam = new Exam({module:module,date:req.body.date,timeHours:req.body.timeHours,timeMins:req.body.timeMins,venue:req.body.venue});
-                    newExam.save(function (err) {
-                        if(err){
-                            console.log(err);
-                        }
-                        else{
-                            res.redirect("/setCalendar");
-                        }
-                    });
-                    // res.redirect('/viewCalendar');
+        if(validator.isAlpha(req.body.venue)){
+            Exam.find({module:module},function(err,exams){
+                if(exams.length===0){
+                    if(examDate>today){
+                        var newExam = new Exam({module:module,date:req.body.date,timeHours:req.body.timeHours,timeMins:req.body.timeMins,venue:req.body.venue});
+                        newExam.save(function (err) {
+                            if(err){
+                                console.log(err);
+                            }
+                            else{
+                                res.redirect("/setCalendar");
+                            }
+                        });
+                        // res.redirect('/viewCalendar');
 
+                    }
+                    else{
+                        req.flash('notify','Invalid date');
+                        res.redirect('/setCalendar');
+                    }
                 }
                 else{
-                    req.flash('notify','Invalid date');
+                    req.flash('notify','Exam already exists');
                     res.redirect('/setCalendar');
                 }
-            }
-            else{
-                req.flash('notify','Exam already exists');
-                res.redirect('/setCalendar');
-            }
-        });
+            });
+        } else{
+            req.flash('notify','Invalid venue name');
+            res.redirect('/setCalendar');
+        }
+
+
     });
-    // Exam.find({module:req.body.module},function (err,module) {
-    //
-    //     if(module.length===0){
-    //         if(examDate>today){
-    //             Module.findOne({_id:req.body.module},function (err,module) {
-    //                if(err){
-    //                    console.log(err);
-    //                }
-    //                else{
-    //                    var newExam = new Exam({module:module,date:req.body.date,timeHours:req.body.timeHours,timeMins:req.body.timeMins,venue:req.body.venue});
-    //
-    //                }
-    //             });
-    //
-    //         }
-    //         else{
-    //             res.send("Date not valid!");
-    //         }
-    //
-    //     }
-    //     else{
-    //         req.flash('notify','Exam already exists');
-    //         res.redirect('/setCalendar');
-    //     }
-    // })
+
 });
 
 app.get('/viewCalendar',function (req,res) {
